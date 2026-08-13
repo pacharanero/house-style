@@ -26,7 +26,7 @@ YYYY-talk-title
 
 Examples:
 
-- `2026-gitehr`
+- `2026-electronic-health-records`
 - `2026-openehr`
 - `2025-lets-talk-digital-clinical-safety`
 

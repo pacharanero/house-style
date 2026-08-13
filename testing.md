@@ -6,7 +6,7 @@ How tests are structured and the patterns worth reaching for. Tests run via `s/t
 
 When a crate has a registry of things that must *all* satisfy a contract, write one test that iterates the registry and asserts the contract for every member. It turns "remember to..." into a compile-and-test guarantee and scales for free as the registry grows - a new member that forgets the contract fails the suite, not code review.
 
-> clincalc's `every_calculator_records_its_license` iterates `all()` and asserts each calculator returns a non-empty licence and an `http(s)` evidence URL. Adding a calculator without one is a test failure.
+> [`pacharanero/clincalc`](https://github.com/pacharanero/clincalc)'s `every_calculator_records_its_license` iterates `all()` and asserts each calculator returns a non-empty licence and an `http(s)` evidence URL. Adding a calculator without one is a test failure.
 
 ## Golden / literature-vector tests
 

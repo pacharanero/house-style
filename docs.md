@@ -186,7 +186,7 @@ Configure the site URL for the chosen GitHub Pages location; add a `CNAME` file 
 
 ## Local preview
 
-`s/docs` runs `zensical serve` (greenbook uses `zensical serve --open`). Keep it dependency-light - no Docker just to preview docs.
+`s/docs` runs `zensical serve` ([`pacharanero/greenbook`](https://github.com/pacharanero/greenbook) uses `zensical serve --open`). Keep it dependency-light - no Docker just to preview docs.
 
 **Bind the first free port in a range (8000-8030), not a fixed one.** Working across several repos you often have more than one docs server up, and a hard-coded 8000 means the second `s/docs` dies with "address already in use". `s/docs` should scan the range, serve on the first free port, print the chosen `http://localhost:<port>` so the dynamic port is discoverable, and still honour a caller-supplied `-a`/`--dev-addr` override.
 
@@ -211,9 +211,9 @@ Do not require every repo to carry all of these. A CLI with a small docs site ma
 ## Content conventions
 
 - Navigation grouped by task, not by source file.
-- One page per CLI command/subcommand; for CLI tools include runnable demos (copy-pasteable `clincalc <name> ...` invocations with their output).
+- One page per CLI command/subcommand; for CLI tools include runnable demos, such as copy-pasteable [`pacharanero/clincalc`](https://github.com/pacharanero/clincalc) invocations with their output.
 - An `edit`/`view` action link back to the file on GitHub (`content.action.edit`).
 - A domain glossary where the project has its own language, alongside a `CONTEXT.md` where useful.
 - Host the install one-liner proxies (`install.sh`, `install.ps1`) at the site root - see [distribution.md](distribution.md).
-- A demo or presentation sub-app can live under `docs/demo/` or `docs/presentation/` as static assets linked from the nav (greenbook).
+- A demo or presentation sub-app can live under `docs/demo/` or `docs/presentation/` as static assets linked from the nav, as in [`pacharanero/greenbook`](https://github.com/pacharanero/greenbook).
 - For DCB0129-style clinical safety docs, use the Zensical/PDF pattern in [clinical-safety.md](clinical-safety.md).

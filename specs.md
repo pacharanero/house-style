@@ -62,7 +62,7 @@ Rules:
 
 ## Ubiquitous language
 
-When a project has its own domain vocabulary, write it down. Follow the `gitehr` / `greenbook` style:
+When a project has its own domain vocabulary, write it down. Follow the [`gitehr/gitehr`](https://github.com/gitehr/gitehr) / [`pacharanero/greenbook`](https://github.com/pacharanero/greenbook) style:
 
 - Canonical term.
 - Plain definition.

@@ -49,7 +49,7 @@ Use Git history and PR discussion as part of the evidence trail. Do not hide the
 
 ## DCB0129 / DCB0160 documentation
 
-For DCB0129-style clinical safety management files, use the `turva/dcb0129-template` pattern: Markdown source, Zensical site, GitHub Pages deploy, and optional PDF output for organisations that still require a single offline document.
+For DCB0129-style clinical safety management files, use the [`pacharanero/SAFETY.md`](https://github.com/pacharanero/SAFETY.md) pattern: Markdown source, version-controlled safety artefacts, and optional documentation-site or PDF output for organisations that still require a single offline document.
 
 The template is a starting point, not a completed safety case. Generated clinical safety text must be reviewed and rewritten for the actual product, team, deployment context, and hazards.
 

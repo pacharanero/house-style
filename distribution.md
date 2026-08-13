@@ -41,7 +41,7 @@ The cascade has two required workflow pieces:
 
 Do not rely on the tag-push event from `auto-tag.yml`: a tag pushed with the default `GITHUB_TOKEN` does **not** trigger downstream workflows because of GitHub's anti-recursion guard. Either invoke via `workflow_call` (preferred) or use a PAT to push the tag (not preferred).
 
-Older cargo-dist-generated workflows were tag-driven only; do not move those repos to the cascade until `release.yml` has `workflow_call`. Current cargo-dist workflows can be `workflow_call`-able (as in `gitehr` and `dsc`), so cargo-dist repos can converge on the cascade once their release workflow has the right trigger. `dsc` has completed this migration.
+Older cargo-dist-generated workflows were tag-driven only; do not move those repos to the cascade until `release.yml` has `workflow_call`. Current cargo-dist workflows can be `workflow_call`-able, as in [`gitehr/gitehr`](https://github.com/gitehr/gitehr) and [`koloki-co/dsc`](https://github.com/koloki-co/dsc), so cargo-dist repos can converge on the cascade once their release workflow has the right trigger. [`koloki-co/dsc`](https://github.com/koloki-co/dsc) has completed this migration.
 
 ### Branch protection on `main` (the cascade's native habitat)
 
@@ -83,13 +83,13 @@ Pin the action SHAs in the generated `release.yml` after generation (cargo-dist 
 
 ## crates.io
 
-Publishable crates (libraries, and CLIs people may `cargo install`) publish on the `vX.Y.Z` tag via **`publish-crates.yml`**: build, test, then `cargo publish` (`--no-verify --allow-dirty` is fine - the index check regenerates `Cargo.lock`). Needs the `CARGO_REGISTRY_TOKEN` secret. Publish leaf crates before their dependents. `dsc`'s workflow is the reference.
+Publishable crates (libraries, and CLIs people may `cargo install`) publish on the `vX.Y.Z` tag via **`publish-crates.yml`**: build, test, then `cargo publish` (`--no-verify --allow-dirty` is fine - the index check regenerates `Cargo.lock`). Needs the `CARGO_REGISTRY_TOKEN` secret. Publish leaf crates before their dependents. [`koloki-co/dsc`](https://github.com/koloki-co/dsc)'s workflow is the reference.
 
 Do not use a separate release automation tool to own version bumps, changelog updates, tags, or crates.io publication as the default house style. The standard release path is still `s/version++` -> `auto-tag.yml` -> cargo-dist / publish workflows.
 
 ## cargo-binstall
 
-Add `[package.metadata.binstall]` so `cargo binstall <crate>` finds the release archives (pkg-url/pkg-fmt overrides per platform). `sct`'s `Cargo.toml` is the reference.
+Add `[package.metadata.binstall]` so `cargo binstall <crate>` finds the release archives (pkg-url/pkg-fmt overrides per platform). [`pacharanero/sct`](https://github.com/pacharanero/sct/blob/main/Cargo.toml)'s `Cargo.toml` is the reference.
 
 ## Shell completions in packages and installers
 

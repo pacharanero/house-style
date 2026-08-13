@@ -10,7 +10,7 @@ Keep the reusable core a **leaf**: it depends only on what it needs to compute (
 - A typed result schema the core owns, shared by every surface.
 - A registry (`all()` / `get(name)`) so surfaces enumerate one list (see [rust-cli.md](rust-cli.md)).
 
-> `clincalc` with `default-features = false` depends only on serde/serde_json - no gitehr, no tokio - so one engine drives the CLI, an MCP server, a GUI, and web tools, and it lifted into its own repo unchanged.
+> [`pacharanero/clincalc`](https://github.com/pacharanero/clincalc) with `default-features = false` depends only on serde/serde_json - no [`gitehr/gitehr`](https://github.com/gitehr/gitehr), no tokio - so one engine drives the CLI, an MCP server, a GUI, and web tools, and it lifted into its own repo unchanged.
 
 ## Dependency progression: path, then git, then crates.io
 

@@ -31,7 +31,7 @@ The changelog should be useful to a user:
 - Routine dependency bumps usually do not, unless they fix a security issue or change supported platforms.
 - Release commits themselves should be skipped by the changelog config.
 
-`dsc` is the reference `cliff.toml` shape. Copy from a living repo rather than recreating a config from scratch.
+[`koloki-co/dsc`](https://github.com/koloki-co/dsc/blob/main/cliff.toml) is the reference `cliff.toml` shape. Copy from a living repo rather than recreating a config from scratch.
 
 ## Release commits
 

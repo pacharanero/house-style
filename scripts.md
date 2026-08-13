@@ -43,7 +43,7 @@ Rules:
 5. **Forward arguments with `"$@"`** so the underlying tool's flags are reachable without wrapping each one.
 6. **Header comment** explaining purpose, one-time setup, and common gotchas. The header is the README for the script.
 7. **Preflight, don't just fail**: if the script depends on something the reader might not have installed yet (a venv, a binary, a Docker daemon, an open port), check for it and emit a copy-pasteable fix.
-8. **SPDX header optional** on trivial wrappers; required on anything that contains non-trivial logic (the `sct` convention).
+8. **SPDX header optional** on trivial wrappers; required on anything that contains non-trivial logic (the [`pacharanero/sct`](https://github.com/pacharanero/sct) convention).
 
 ## Canonical script names
 
@@ -62,7 +62,7 @@ The same names mean the same things in every repo. Add as needed; don't reach fo
 
 There is deliberately **no `s/release`**. Bumping the version with `s/version++` and landing the release commit on `main` is the release - the auto-tag workflow does the tagging and shipping. The landing may be a direct push or a release PR, depending on branch protection. A separate release script that also tags/pushes was a source of divergence between repos; [distribution.md](distribution.md) is the canonical model.
 
-Project-specific scripts are fine alongside these (`s/generate` in gitehr makes 10,000 test repos; `s/size` reports disk footprint; `s/spellcheck` in dgc-documentation runs codespell). Name them for the verb.
+Project-specific scripts are fine alongside these (`s/generate` in [`gitehr/gitehr`](https://github.com/gitehr/gitehr) makes 10,000 test repos; `s/size` reports disk footprint; `s/spellcheck` in [`rcpch/digital-growth-charts-documentation`](https://github.com/rcpch/digital-growth-charts-documentation) runs codespell). Name them for the verb.
 
 ## `s/docs` - the canonical example
 
@@ -97,7 +97,7 @@ Use these when the repo needs them; do not add them to a small code repo with a 
 
 Once a project has more than three scripts, add `s/README.md` listing them with a one-line summary and the most common invocations.
 
-The shape used in `gitehr/s/README.md` and `rcpch/dgc-documentation/s/README.md` is the template:
+The shape used in [`gitehr/gitehr`](https://github.com/gitehr/gitehr) and [`rcpch/digital-growth-charts-documentation`](https://github.com/rcpch/digital-growth-charts-documentation) is the template:
 
 ```markdown
 # `s/`

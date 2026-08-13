@@ -36,7 +36,7 @@ When an algorithm or dataset comes from elsewhere, record it and honour its lice
 
 - Carry the upstream licence and any required disclaimer (e.g. QRISK3 / QFracture are ported from ClinRisk's LGPL-3.0 source and must carry the ClinRisk disclaimer).
 - Third-party content keeps its own copyright (e.g. SNOMED CT terms remain SNOMED International's, subject to its licence) - document it in-file and in the README.
-- Where each item can record its own distribution licence (as `clincalc`'s `Calculator::license()` does), make that a required, tested field so nothing ships without its provenance on record.
+- Where each item can record its own distribution licence, as in [`pacharanero/clincalc`](https://github.com/pacharanero/clincalc), make that a required, tested field so nothing ships without its provenance on record.
 
 ## README licensing section
 
