@@ -1,0 +1,22 @@
+# Secrets and local environment files
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Operating system files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Editors and temporary files
+.idea/
+*.swp
+*.swo
+*~
+*.log
+tmp/
+.cache/
+
+# Add only the stack-specific patterns the repository needs.

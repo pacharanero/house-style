@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+# This example will receive the repository's permissive code licence before release.
+#
+# Start a Docker Compose documentation stack and open the docs URL once it is
+# reachable. Copy this when docs are containerised and `s/docs-zensical` is not
+# the right shape.
+#
+# Override defaults with:
+#   DOCS_SERVICE=docs DOCS_PORT=8000 s/docs
+
+set -euo pipefail
+cd "$(git rev-parse --show-toplevel)"
+
+service="${DOCS_SERVICE:-docs}"
+port="${DOCS_PORT:-8000}"
+url="http://localhost:${port}"
+
+if ! command -v docker >/dev/null 2>&1; then
+  echo "Docker is required for this docs stack." >&2
+  exit 1
+fi
+
+open_browser() {
+  if [[ -n "${BROWSER:-}" ]]; then
+    "$BROWSER" "$url" >/dev/null 2>&1 || true
+  elif command -v xdg-open >/dev/null 2>&1; then
+    xdg-open "$url" >/dev/null 2>&1 || true
+  elif command -v open >/dev/null 2>&1; then
+    open "$url" >/dev/null 2>&1 || true
+  fi
+}
+
+wait_for_docs() {
+  for _ in {1..60}; do
+    if curl -fsS "$url" >/dev/null 2>&1; then
+      return 0
+    fi
+    sleep 1
+  done
+  return 1
+}
+
+docker compose up -d "$service"
+echo "Docs starting at ${url}"
+
+if wait_for_docs; then
+  open_browser
+  echo "Docs ready at ${url}"
+else
+  echo "Docs did not become reachable at ${url}; showing compose logs." >&2
+  docker compose logs --tail=80 "$service" >&2
+  exit 1
+fi

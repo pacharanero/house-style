@@ -1,0 +1,4 @@
+interface:
+  display_name: "Audit House Style"
+  short_description: "Audit a repo against house style"
+  default_prompt: "Use $audit-house-style to audit <target-repository-path> and write HOUSE-STYLE-AUDIT.md in the target repo."

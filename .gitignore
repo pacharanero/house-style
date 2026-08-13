@@ -1,0 +1,18 @@
+# Local and agent-generated artefacts
+.private/
+.playwright-mcp/
+.claude/
+
+# Operating system and editor files
+.DS_Store
+Thumbs.db
+Desktop.ini
+.idea/
+*.swp
+*.swo
+*~
+
+# Temporary files
+*.log
+tmp/
+.cache/

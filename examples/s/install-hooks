@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+# This example will receive the repository's permissive code licence before release.
+#
+# Install tracked local Git hooks for this checkout.
+#
+# Expected repo shape:
+#   .githooks/pre-commit  -> usually runs `s/lint`
+#   s/install-hooks       -> this script, copied into the repo
+#
+# Hooks are opt-in per checkout. This script does not write into .git/hooks.
+
+set -euo pipefail
+cd "$(git rev-parse --show-toplevel)"
+
+if [[ ! -d .githooks ]]; then
+  cat >&2 <<'EOF'
+No .githooks directory found.
+
+Create tracked hooks first, for example:
+
+  mkdir -p .githooks
+  printf '%s\n' '#!/usr/bin/env bash' 'set -euo pipefail' 'cd "$(git rev-parse --show-toplevel)"' 'exec s/lint' > .githooks/pre-commit
+  chmod +x .githooks/pre-commit
+EOF
+  exit 1
+fi
+
+git config core.hooksPath .githooks
+echo "Git hooks installed: core.hooksPath=.githooks"

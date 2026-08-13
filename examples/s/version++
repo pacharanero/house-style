@@ -1,0 +1,112 @@
+#!/usr/bin/env bash
+# This example will receive the repository's permissive code licence before release.
+#
+# Bump a Rust workspace version, regenerate changelog/lockfile, commit, and land
+# the release commit on main. In an unprotected repo this pushes directly; when
+# branch protection is detected it opens a release PR instead.
+#
+# Copy this as a starting point, then add project-specific version files such as
+# gui/package.json or gui/src-tauri/tauri.conf.json.
+
+set -euo pipefail
+cd "$(git rev-parse --show-toplevel)"
+
+bump="patch"
+mode="auto"
+
+usage() {
+  cat <<'EOF'
+Usage: s/version++ [patch|minor|major] [--direct|--pr]
+
+Creates chore(release): vX.Y.Z and lands it on main.
+The auto-tag workflow creates the tag after the commit reaches main.
+EOF
+}
+
+while (($#)); do
+  case "$1" in
+    patch|minor|major) bump="$1" ;;
+    --direct) mode="direct" ;;
+    --pr) mode="pr" ;;
+    -h|--help) usage; exit 0 ;;
+    *) echo "Unknown argument: $1" >&2; usage >&2; exit 2 ;;
+  esac
+  shift
+done
+
+require_clean_main() {
+  if [[ "$(git branch --show-current)" != "main" ]]; then
+    echo "Refusing to release: checkout main first." >&2
+    exit 1
+  fi
+  if [[ -n "$(git status --porcelain)" ]]; then
+    echo "Refusing to release: working tree is dirty." >&2
+    exit 1
+  fi
+}
+
+detect_landing_mode() {
+  if [[ "$mode" != "auto" ]]; then
+    echo "$mode"
+    return
+  fi
+  if ! command -v gh >/dev/null 2>&1; then
+    echo "direct"
+    return
+  fi
+  local repo
+  repo="$(gh repo view --json nameWithOwner -q .nameWithOwner 2>/dev/null || true)"
+  if [[ -z "$repo" ]]; then
+    echo "direct"
+    return
+  fi
+  if gh api "repos/${repo}/branches/main/protection" >/dev/null 2>&1; then
+    echo "pr"
+  else
+    echo "direct"
+  fi
+}
+
+require_clean_main
+landing_mode="$(detect_landing_mode)"
+
+echo "Running pre-release checks..."
+cargo fmt --all --check
+cargo clippy --all-targets -- -D warnings
+cargo test
+
+cargo set-version --bump "$bump"
+cargo generate-lockfile
+
+version="$(awk -F\" '/^version = / { print $2; exit }' Cargo.toml)"
+if [[ -z "$version" ]]; then
+  echo "Could not read version from Cargo.toml after bump." >&2
+  exit 1
+fi
+
+if [[ -f cliff.toml ]]; then
+  git cliff --tag "v${version}" --output CHANGELOG.md
+fi
+
+if [[ "$landing_mode" == "pr" ]]; then
+  git switch -c "release/v${version}"
+fi
+
+git add Cargo.toml Cargo.lock CHANGELOG.md 2>/dev/null || git add Cargo.toml Cargo.lock
+git commit -m "chore(release): v${version}"
+
+case "$landing_mode" in
+  direct)
+    git push origin main
+    ;;
+  pr)
+    git push -u origin "release/v${version}"
+    gh pr create --base main --head "release/v${version}" --title "chore(release): v${version}" --body "Release v${version}."
+    ;;
+  *)
+    echo "Unknown landing mode: $landing_mode" >&2
+    exit 1
+    ;;
+esac
+
+echo "Release commit for v${version} landed via ${landing_mode} mode."
