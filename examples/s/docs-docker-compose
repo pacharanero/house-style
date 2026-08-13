@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# This example will receive the repository's permissive code licence before release.
+# SPDX-FileCopyrightText: 2026 Marcus Baw
+# SPDX-License-Identifier: MIT
 #
 # Start a Docker Compose documentation stack and open the docs URL once it is
 # reachable. Copy this when docs are containerised and `s/docs-zensical` is not

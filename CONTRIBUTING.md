@@ -26,4 +26,4 @@ By contributing, you agree that your contribution is licensed under this reposit
 
 ## Code Of Conduct
 
-This project will add a code of conduct before inviting broad external participation. See [queries.md](queries.md).
+This project follows the [Code of Conduct](CODE_OF_CONDUCT.md). By participating, you agree to follow it.

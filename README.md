@@ -11,7 +11,7 @@ Start with **[AGENTS.md](AGENTS.md)** (the index and cross-cutting essentials). 
 - [distribution.md](distribution.md) - releases, cargo-dist, Homebrew, crates.io
 - [docs.md](docs.md) - Zensical documentation sites
 - [agents.md](agents.md) - agent instruction files and read-first guidance
-- [licensing.md](licensing.md) - AGPL, SPDX headers, REUSE, content licensing
+- [licensing.md](licensing.md) - SPDX headers, REUSE, and content licensing
 - [new-repos.md](new-repos.md) - new repo scaffolding and setup runbook
 - [presentations.md](presentations.md) - Reveal.js CDN slide decks, presentation style, local serving
 - [private-workspace.md](private-workspace.md) - gitignored local-only decks, reports, captures, and notes
@@ -27,12 +27,12 @@ Start with **[AGENTS.md](AGENTS.md)** (the index and cross-cutting essentials). 
 Supporting files:
 
 - [examples/](examples/) - copyable script, Rust CLI, and governance examples for agents and humans
-- [skills/](skills/) - canonical reusable agent skills, installable into Codex, Claude Code, and other agents
+- [skills/](skills/) - canonical reusable agent skills that can be copied into an agent platform's documented skill location
 - [commands/](commands/) - slash-command wrappers that point to canonical skills or workflows
 
 ## Licence
 
-The standards and prose are licensed under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). The copyable code examples will receive a permissive licence before the first public release; see [queries.md](queries.md).
+The standards and prose are licensed under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). Copyable Rust and shell examples are [MIT licensed](LICENSES/MIT.txt).
 
 ## Contributing And Security
 

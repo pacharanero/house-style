@@ -4,6 +4,10 @@ Reference: Matt Pocock's `writing-great-skills` skill (<https://github.com/mattp
 
 Skills are small, load-bearing instruction packages for agents. A good skill makes agent behaviour more predictable: not identical output every run, but the same process, checks, and stopping conditions when faced with the same kind of task.
 
+## Distribution
+
+Copy a skill directory into the target agent platform's documented skill location. Do not prescribe one filesystem location across Claude Code, Codex, OpenCode, and other tools: their installation layouts and discovery rules differ. Link to this repository from project agent instructions when a project adopts its standards, and keep project-specific instructions in the project rather than modifying this repository's skills.
+
 ## What belongs in a skill
 
 Create a skill when the agent needs procedural knowledge that is not obvious from general coding ability:

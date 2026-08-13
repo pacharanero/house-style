@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# This example will receive the repository's permissive code licence before release.
+# SPDX-FileCopyrightText: 2026 Marcus Baw
+# SPDX-License-Identifier: MIT
 #
 # Serve a Zensical docs site locally with hot reload. Copy this file to
 # `s/docs` in a repo that uses Zensical / MkDocs directly, not Docker Compose.

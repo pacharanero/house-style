@@ -1,4 +1,5 @@
-// This example will receive the repository's permissive code licence before release.
+// SPDX-FileCopyrightText: 2026 Marcus Baw
+// SPDX-License-Identifier: MIT
 
 use anyhow::Result;
 
