@@ -21,7 +21,9 @@ Every agent instruction file should include:
 - **Core invariants**: the small number of rules that must not be violated. Examples: a core crate stays a leaf; clinical calculations cite primary literature; generated files are not hand-edited.
 - **Local workflow**: the canonical `s/` scripts and validation commands.
 - **Before every commit**: the exact checks CI enforces.
+- **Git workflow**: whether agents commit and push directly to `main` or must use a branch and PR. In the absence of a local exception, follow [commits.md](commits.md): commit and push each validated coherent parcel.
 - **External actions**: what needs explicit approval, such as publishing releases, deleting branches, force-pushing, posting issues, or running scans against third-party systems.
+- **Protected paths and environments**: code owners, release or deployment paths, and the branch-protection tier where these matter; see [ci.md](ci.md).
 
 Keep the file short enough that an agent actually reads it. Put detailed domain design in `CONTEXT.md`, `spec/`, or docs pages and link to it.
 
@@ -35,6 +37,12 @@ Treat an agent as a capable junior developer: give it a clear, well-scoped task 
 - For clinical logic, safety-critical workflows, authentication, cryptography, authorisation, input validation, or code handling real patient data, validate the behaviour independently against an authoritative source, threat model, or reviewed clinical evidence.
 - Agent-generated tests must not be the sole basis for accepting high-consequence behaviour. Review their assumptions and include source-derived vectors or other independent evidence where applicable.
 - Record safety-relevant changes, hazards, evidence, and review decisions in the same PR and documentation trail as the implementation.
+
+## Agent Git handoff
+
+After completing a validated coherent parcel, agents should inspect the diff, commit it, and push it using the repository's branching workflow. The remote repository is shared state for scheduled agents and collaborators, so leaving completed work only in a local worktree risks duplicated or conflicting changes.
+
+For a new or fast-moving repository with one or two active contributors, direct commits to `main` or `live` are the default unless local instructions say otherwise. For a mature repository with several contributors, a protected default branch, or a PR convention, agents use a descriptive feature branch and push it for PR review. Ask when the repository state or intended workflow is unclear.
 
 ## Agent artefacts
 
@@ -105,6 +113,13 @@ This file is the entry point for AI coding agents. Read it before changing anyth
 <validation commands>
 ```
 
+## Git Workflow
+
+- Commit and push each validated coherent parcel; do not leave completed work only locally.
+- Use direct `main` / `live` commits for fast-moving work with one or two contributors when permitted.
+- Use a descriptive branch and PR for mature collaborative or protected repositories.
+- Ask if the appropriate path is unclear.
+
 ## Assurance
 
 - Review the diff and validation results after agent changes.
@@ -112,5 +127,5 @@ This file is the entry point for AI coding agents. Read it before changing anyth
 
 ## Approval Required
 
-Ask before publishing releases, deleting branches, force-pushing, changing secrets, or taking externally visible actions.
+Ask before publishing releases, deleting branches, force-pushing, changing secrets, bypassing branch protection or deployment approvals, or taking externally visible actions.
 ````

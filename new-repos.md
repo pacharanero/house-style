@@ -51,7 +51,8 @@ Use badges only when they carry real information. CI, licence, release version, 
 5. Add `s/test`, `s/lint`, `s/docs`, or `s/up` only as they become real repeated processes.
 6. Add CI once there is a meaningful check.
 7. Add Dependabot for the ecosystems actually present.
-8. Link agent instructions to the adopted standards, for example <https://github.com/pacharanero/house-style/blob/main/AGENTS.md>.
+8. Set the Solo `main` protection baseline: require CI, block force pushes and deletion, and document any deliberate exception. Select a higher tier from [ci.md](ci.md) before accepting collaborators, deploying production workloads, or handling high-consequence code.
+9. Link agent instructions to the adopted standards, for example <https://github.com/pacharanero/house-style/blob/main/AGENTS.md>.
 
 ## Do not over-scaffold
 

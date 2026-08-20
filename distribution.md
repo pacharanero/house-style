@@ -55,6 +55,8 @@ The cascade is the model that survives branch protection on `main`; local-tag do
 
 For repos expected to become multi-contributor, treat the cascade + branch-protection-ready `s/version++` as the convergence target. Keep local-tag only as a named exception for repos that intentionally remain direct-push-to-main.
 
+Production release jobs use the deployment-trust baseline in [ci.md](ci.md): a protected environment, least-privilege workflow permissions, and OIDC or another workload identity in preference to a long-lived cloud credential. A release workflow may receive only the permissions and environment access it needs; its build and test jobs remain read-only.
+
 **One script, whichever model.** There is never a second `s/release` that also bumps/tags/pushes - that overlap is exactly what this standard removes.
 
 ### Conventional commits + changelog

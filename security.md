@@ -18,6 +18,16 @@ Never run recon, scanning, exploitation, or credential testing against third-par
 
 Public repos should have a `SECURITY.md` vulnerability reporting policy. Private repos should still document where sensitive findings belong.
 
+## Identity and access
+
+Use MFA for every source-control, cloud, registry, and production-service account. Prefer phishing-resistant passkeys or hardware security keys where the service supports them. Store unique passwords in an approved password manager; never share accounts or credentials.
+
+Protect SSH private keys with a passphrase and keep them in the operating system's secure key store or a hardware-backed agent where practical. Use a separate deploy key or workload identity for automation rather than a maintainer's personal SSH key. Review SSH keys, deploy keys, personal access tokens, OAuth apps, GitHub Apps, and cloud service principals regularly.
+
+Grant the smallest role that lets a person or automation do its job. Avoid standing administrator access to repositories, registries, clouds, and production systems. Make access removal part of offboarding and role changes: revoke service access, tokens, SSH and deploy keys, app installations, recovery factors, and environment approvals promptly; rotate any shared secret. After suspected compromise, revoke active credentials, rotate affected secrets, review audit logs and recent deployments, and record the incident and remediation.
+
+For source-control and deployment requirements, use the tiered `main` and environment baseline in [ci.md](ci.md). Signed commits may provide useful tamper evidence, but they do not establish trusted human identity, independent review, or correctness.
+
 ## Reproducible security workflows
 
 Recurring security work belongs in scripts or playbooks:

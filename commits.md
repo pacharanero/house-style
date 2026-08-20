@@ -19,7 +19,27 @@ Use a scope when it helps: `feat(cli):`, `fix(docs):`, `ci(release):`. Do not in
 
 ## Message body
 
-Add a body when the reason is not obvious from the diff. Good bodies explain tradeoffs, migration notes, or why a surprising choice is deliberate. Do not restate the file list.
+Each commit should be one coherent change that can be understood, reviewed, reverted, and, where useful, cherry-picked on its own. Split unrelated cleanup from functional work. Add a body when the reason is not obvious from the diff. Good bodies explain tradeoffs, migration notes, or why a surprising choice is deliberate. Do not restate the file list.
+
+## Commit, push, and branch workflow
+
+Commit and push validated, coherent work regularly. The remote is the shared source of truth for people, CI, and scheduled agents; uncommitted or unpushed work is invisible to collaborators and can lead to duplicated or conflicting work. Do not end a completed agent task with a dirty worktree by default.
+
+Use commits as small, semantic parcels: one feature slice, fix, refactor, documentation change, or dependency update. A parcel should be safe to review and revert independently. Do not make a single end-of-day dump commit, and do not split tightly coupled implementation, tests, and required documentation merely to create more commits.
+
+Choose the integration path from the repository's maturity and collaboration model:
+
+| Repository state | Default workflow |
+| --- | --- |
+| New or fast-moving work with one or two active contributors and no `main` PR requirement | Commit and push directly to `main` or `live` in coherent parcels. |
+| Mature repository with regular contributors, protected `main`, or a local PR convention | Create a descriptive branch from current `main`, commit and push parcels to it, then open or update a focused PR. |
+| Unsure which applies | Ask before changing branches or pushing. |
+
+Use a concise, descriptive branch name such as `feat/export-report`, `fix/login-timeout`, or `docs/deployment-trust`. Keep it scoped to one coherent change. Rebase or merge the current `main` according to the repository's local convention, then delete the branch after the PR lands.
+
+Before pushing, inspect `git status` and the staged diff, run the applicable validation, and ensure no secrets or unrelated user changes are included. Before starting work, fetch the remote and inspect the branch state. If another contributor's uncommitted changes conflict with the task, stop and ask; otherwise leave them untouched.
+
+An agent may leave work uncommitted only when the user explicitly asks, validation is blocked and the partial state would misrepresent a completed parcel, or the repository's local instructions require review before committing or pushing. State the reason clearly in the handoff. Publishing releases, force-pushing, bypassing protections, and other externally consequential actions still need the approval required by local instructions.
 
 ## Changelog
 

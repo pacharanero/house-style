@@ -40,6 +40,34 @@ This job assumes the workflow-level default is `permissions: contents: read`. Ev
 
 Zizmor's static analysis does not inspect shell scripts or other files invoked by workflows, and it cannot resolve every runtime-generated value. It complements SHA pinning, review, least privilege, and ordinary code scanning; it does not replace them.
 
+## Main branch protection
+
+Protect `main` according to the repository's risk tier. Use GitHub rulesets where available because they compose and can be evaluated in dry-run mode; use a single `main` branch-protection rule where rulesets are unavailable. In every tier, disable force pushes and branch deletion, require the repository's CI checks, and give each required check a unique job name and expected GitHub App source.
+
+| Tier | Applies to | `main` requirements |
+| --- | --- | --- |
+| Solo | One active maintainer; no production deployment | Required CI checks. Direct pushes are permitted. |
+| Collaborative | More than one regular contributor or maintainer | Pull requests, one independent approval, stale approvals dismissed on new commits, required CI checks, resolved review threads, and no routine bypass. |
+| Public | Public repository that accepts external contributions | Collaborative requirements, CODEOWNERS for high-risk paths where practical, and review-dismissal restricted to maintainers. |
+| Production | Repository that deploys a service, publishes packages, or controls infrastructure | Public requirements, strict required checks (branch up to date), protected deployment environments, and audited emergency bypass only. |
+| Security-sensitive or clinical | Handles credentials, sensitive data, security controls, clinical logic, or patient-affecting workflows | Production requirements, at least two independent approvals where staffing permits, code-owner review for high-consequence paths, and documented human review of releases and emergency bypasses. |
+
+Do not create theatre by requiring an approval a solo maintainer cannot obtain. A solo repository still needs CI, protected history, and a conscious decision before moving to direct production deployment. Move it to the collaborative tier when a second maintainer can independently review changes.
+
+For tiers requiring pull requests, enable both stale-approval dismissal and approval by someone other than the most recent pusher. Require all review conversations to be resolved. Enforce protections for administrators and bypass roles where the GitHub plan supports it. Bypass access is an emergency capability, not a faster merge button: limit it to named maintainers, record the reason and follow-up in the PR or incident record, and review it afterwards.
+
+Require signed commits only when the team can operate and recover the signing setup reliably. A verified signature proves control of a signing key, not that the author is the intended person, a change was independently reviewed, or the code is correct. It supplements account security, review, and CI; it replaces none of them.
+
+The branch policy must preserve the release model in [distribution.md](distribution.md). In a protected repository, `s/version++` creates the release PR and `auto-tag.yml` tags only after it merges to `main`; do not grant a version script a branch-protection bypass merely to preserve direct releases.
+
+## Deployment identity and environments
+
+Deploy from CI, not from a developer workstation. A production deployment job must name a protected GitHub environment, restrict eligible branches and tags to the release path, and use required reviewers when a human production decision is needed. Keep build/test jobs read-only; give deployment credentials and `id-token: write` only to the deployment job.
+
+Prefer OpenID Connect (OIDC) or an equivalent workload identity to long-lived cloud, registry, or infrastructure credentials. Bind the provider trust policy to the specific repository, workflow or reusable workflow, ref or protected environment, and intended audience. Grant the resulting role only the permissions required for that deployment. OIDC tokens are short-lived, but an overly broad trust condition is still a production credential.
+
+Where a long-lived secret is unavoidable, scope it to one environment and service, restrict its readers, record its owner and rotation procedure, rotate it on suspicion or role change, and remove it when workload identity becomes available.
+
 ## Security audit (Rust)
 
 Run `cargo audit` as its own CI job so a dependency with a published [RustSec](https://rustsec.org) advisory fails the build - caught on the next push rather than waiting on a Dependabot email (and `cargo audit` catches advisories Dependabot doesn't, e.g. `unsound` ones, and picks up an advisory whose fixed-version range was revised after Dependabot's first alert). Install the prebuilt binary rather than building from source:
