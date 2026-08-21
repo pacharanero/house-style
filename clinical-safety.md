@@ -53,6 +53,41 @@ For DCB0129-style clinical safety management files, use the [`pacharanero/SAFETY
 
 The template is a starting point, not a completed safety case. Generated clinical safety text must be reviewed and rewritten for the actual product, team, deployment context, and hazards.
 
+## Medical-device applicability assessment
+
+At project inception, record an assessment of whether the product may fall within medical-device regulation. Keep it in `SAFETY.md` for a small project or in a linked `MEDICAL-DEVICE-ASSESSMENT.md` for a larger safety file set. This is a governance record, not regulatory advice or a self-classification.
+
+The record must state:
+
+- The product's intended purpose, including intended users, patients or populations, use setting, and clinical claims.
+- The decision-maker's name and responsible role.
+- Decision date and review date.
+- Evidence considered, including dated links to applicable MHRA guidance, product requirements, user-facing claims, and professional or legal advice where obtained.
+- The conclusion, including whether the team considers medical-device or IVD obligations potentially applicable, not applicable, or requiring further advice.
+- Consequent actions and owner, such as obtaining specialist advice, preserving technical documentation, checking market and registration obligations, or recording why no further action is currently needed.
+- Reassessment triggers.
+
+Reassess the record when intended purpose, clinical claims, target users or population, clinical decision support, inputs or outputs, deployment context, integration with a medical device, or market changes. Update it before releasing a change that could alter the conclusion, rather than retrospectively at audit or registration time.
+
+Medical-device applicability and clinical risk management answer different questions. A conclusion that the product is not a medical device does not remove the need to identify and manage clinical hazards. Conversely, a device conclusion does not satisfy the DCB0129 or DCB0160 clinical safety process. Where either is applicable, link the assessment, safety case, hazard log, and resulting obligations from `SAFETY.md`.
+
+The UK framework changes frequently. Check current primary guidance for every assessment, including MHRA guidance on [borderline products](https://www.gov.uk/guidance/borderline-products-how-to-tell-if-your-product-is-a-medical-device) and [regulating medical devices in the UK](https://www.gov.uk/guidance/regulating-medical-devices-in-the-uk), and record the access date. For NHS deployment, also review current NHS England guidance on [DCB0129 and DCB0160 applicability](https://digital.nhs.uk/services/clinical-safety/applicability-of-dcb-0129-and-dcb-0160/step-by-step-guidance).
+
+### Minimal record
+
+```markdown
+## Medical-device applicability
+
+- Intended purpose:
+- Decision-maker and role:
+- Decision date:
+- Next review date:
+- Evidence considered:
+- Conclusion:
+- Actions and owner:
+- Reassessment triggers:
+```
+
 ## Safety and implementation stay linked
 
 When a code change affects clinical behaviour, update the safety docs in the same PR or explicitly explain why no safety doc change is needed. Tests for safety-relevant behaviour should cite the safety hazard or clinical source they protect where practical.
