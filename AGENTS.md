@@ -37,7 +37,7 @@ Canonical reusable skills live under [skills/](skills/). Slash-command wrappers 
 - [presentations.md](presentations.md) - Reveal.js CDN slide decks, presentation style, local serving.
 - [private-workspace.md](private-workspace.md) - the gitignored `.private/` convention for retained local-only artefacts.
 - [repo-presentation.md](repo-presentation.md) - README structure, quick start, badges, visuals, and repo metadata.
-- [rust-cli.md](rust-cli.md) - CLI shape, data-on-stdout/hints-on-stderr, auto-hiding progress bars, path arguments that expand `~` themselves, the declarative pull/edit/push/diff loop, `--dry-run` + destructive-action guards, machine-discoverable `--schema`/template surface, registry-driven dispatch.
+- [rust-cli.md](rust-cli.md) - CLI shape, data-on-stdout/hints-on-stderr, auto-hiding progress bars, path arguments that expand `~` themselves, deterministic configuration discovery, the declarative pull/edit/push/diff loop, `--dry-run` + destructive-action guards, machine-discoverable `--schema`/template surface, registry-driven dispatch.
 - [scripts.md](scripts.md) - the `s/` directory of repeated-process scripts.
 - [security.md](security.md) - scope/authorisation, secrets hygiene, reproducible security workflows.
 - [skills.md](skills.md) - writing predictable, lean, progressively disclosed agent skills.

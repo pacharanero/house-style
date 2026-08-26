@@ -37,6 +37,22 @@ Path arguments are the input half of the same contract, and they hide a sharp, e
 - **Hint the type so completions help.** Give each path argument a `value_hint` (`ValueHint::FilePath` or `ValueHint::DirPath`) so the generated [shell completions](#shell-completions) offer files or directories for it. It composes with the value_parser: one advertises the shape, the other normalises it.
 - **Name the flag after the artefact, not a generic role.** `--ndjson <FILE>` tells the user and the completion what kind of file is wanted; `--input <FILE>` does not. When you rename a flag for clarity, keep the old name as a `visible_alias` so existing scripts and muscle memory keep working.
 
+## Configuration discovery
+
+Configuration selection must be deterministic and diagnosable. Prefer one selected file over implicit layering unless the product has a concrete need for merged configuration and can explain every field's merge semantics.
+
+Use this first-match-wins hierarchy for a tool named `<tool>`:
+
+1. Global `--config <PATH>`.
+2. Explicit `$TOOL_CONFIG` file path.
+3. A documented project file in PWD, when it exists.
+4. `$TOOL_CONFIG_HOME/<filename>`, falling back to `$XDG_CONFIG_HOME/<tool>/<filename>` and then `$HOME/.config/<tool>/<filename>`.
+5. Optional XDG system directories and `/etc` locations only for tools with a real machine-wide administration use case.
+
+There is no ancestor-directory traversal by default. A CLI or environment selector is explicit: expand `~`, require the selected file to exist and parse, fail with a clear error when it does not, and never fall through to a lower-priority source. Missing discovered candidates are skipped. Relative selectors are PWD-relative; relative asset and include paths stored inside a config file are relative to that config file's directory so a configuration bundle remains portable when invoked elsewhere.
+
+Expose a safe bare `<tool> config` diagnostic command that prints the selected source, relevant environment variables, and discovery candidates without printing secrets. Honour the global machine-readable output format. Include normalised absolute paths in structured output, but preserve enough source information to explain why a path won. Test every precedence edge directly, including a missing explicit selector, PWD versus user config, XDG fallback, tilde expansion, and no-config behaviour.
+
 ## Declarative resource management (pull → edit → push → diff)
 
 For a CLI that manages **stateful remote resources** (site settings, theme files, config objects, DNS records), the most powerful and least surprising shape is a declarative sync loop, not a pile of imperative setters.
