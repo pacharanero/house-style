@@ -48,13 +48,17 @@ For a new or fast-moving repository with one or two active contributors, direct 
 
 Scratch output from agent tooling is session state, not project content. Gitignore it in every repo, not only new ones.
 
-- Covers browser-automation and MCP server output (`.playwright-mcp/` and similar tool-output directories), agent config directories (`.claude/`), and any transcript, screenshot, or snapshot a tool drops into the working tree.
+- Covers browser-automation and MCP server output (`.playwright-mcp/`, `.playwright/`, `playwright-report/`, `blob-report/`, and `test-results/`), agent config directories (`.claude/`), and any transcript, screenshot, trace, video, or snapshot a tool drops into the working tree. Do not ignore browser-test source or configuration such as `playwright.config.*`.
 - Committing them leaks local paths and conversation context, and they trip repo-wide file checks - REUSE/licence linting in particular, which scans the working tree rather than the git index, so an untracked artefact directory is enough to fail `reuse lint` locally.
 - Keep them in one commented block in `.gitignore`, so the next tool's directory has an obvious home. Every repository includes this minimum entry; add other named tool-output directories when a tool creates them:
 
 ```gitignore
 # Disposable agent and browser-automation artefacts
-.playwright-mcp/
+/.playwright-mcp
+/.playwright
+/playwright-report
+/blob-report
+/test-results
 ```
 
 Intentionally retained local work is different from disposable agent output. Use the root gitignored [`.private/` convention](private-workspace.md) for decks, reports, captures, notes, and other useful artefacts that should survive the session but must not be committed. Agents should suggest this when the distinction would help rather than scattering durable local output among tool scratch directories.
