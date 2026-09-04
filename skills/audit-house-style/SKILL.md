@@ -1,11 +1,11 @@
 ---
 name: audit-house-style
-description: Audit a local repository against the adopted house-style standards and write a HOUSE-STYLE-AUDIT.md report into the target repo. Use when the user asks to audit, review, check, or assess a repo for house-style compliance, especially via /audit-house-style with a repo path, $audit-house-style with a repo path, or "audit this repo against house style".
+description: Audit a local repository against the adopted house-style standards and add actionable findings to the repository's active roadmap. Use when the user asks to audit, review, check, or assess a repo for house-style compliance, especially via /audit-house-style with a repo path, $audit-house-style with a repo path, or "audit this repo against house style".
 ---
 
 # Audit House Style
 
-Audit one target repository against the installed or checked-out `pacharanero/house-style` standards and write a concrete repo-local improvement report. Do not fix the target repo in this workflow unless the user explicitly asks for fixes after reading the audit.
+Audit one target repository against the installed or checked-out `pacharanero/house-style` standards and add concrete improvement tasks to the repository's active roadmap. Do not fix the target repo in this workflow unless the user explicitly asks for fixes after reading the audit.
 
 ## Inputs
 
@@ -33,7 +33,7 @@ Check:
 
 Note existing dirty or untracked files. Do not modify them.
 
-Completion criterion: the audit can distinguish pre-existing worktree state from the audit file it writes.
+Completion criterion: the audit can distinguish pre-existing worktree state from the roadmap changes it writes.
 
 ### 2. Inspect applicable standards
 
@@ -74,67 +74,53 @@ Use fast tools: `find`, `rg`, `git ls-files`, `sed`. Avoid crawling huge generat
 
 Completion criterion: each proposed improvement cites target repo evidence with file paths.
 
-### 4. Write the audit report
+### 4. Find the active roadmap
 
-Write exactly one file in the target repo unless the user asks otherwise:
+Look for the roadmap named by the target repository's agent instructions, README, spec index, or contribution guidance. Common locations are `spec/roadmap.md`, `ROADMAP.md`, `roadmap.md`, and `docs/roadmap.md`.
 
-```text
-HOUSE-STYLE-AUDIT.md
-```
+- If guidance identifies one roadmap, use it.
+- If there is exactly one plausible roadmap, use it.
+- If several roadmaps exist, determine which owns repository improvement work from their scope and references. Ask the user if ownership remains ambiguous.
+- If no roadmap exists, ask the user where findings should go. Offer `spec/roadmap.md` when the repository already uses `spec/`, otherwise `ROADMAP.md`.
 
-If the filesystem blocks writing outside the current workspace, request permission/escalation rather than writing elsewhere.
+Do not create `HOUSE-STYLE-AUDIT.md` or another standalone audit report.
 
-Use this structure:
+Completion criterion: one existing or user-approved roadmap is identified as the destination.
+
+### 5. Add audit findings to the roadmap
+
+Modify exactly one roadmap file unless the user asks otherwise. Preserve its existing structure and tasks. Add or update a dedicated `## House-Style Audit` section containing:
+
+- Audit date and the applicable standards reviewed.
+- One short paragraph noting the repository's strongest compliant patterns.
+- Priority subsections where useful: `P1`, `P2`, and `P3`.
+- One standard roadmap checkbox per actionable finding, with a stable `HS-<number>` identifier.
+- A short non-checkbox list of deliberate exceptions and non-applicable standards where that prevents future churn.
+
+Use this task shape:
 
 ```markdown
-# House-Style Audit
+Legend: [x] done, [~] in progress or partially done, [ ] not started
+
+## House-Style Audit
 
 Audit date: YYYY-MM-DD
 
-Audited against: `pacharanero/house-style` as of this date, especially ...
+### P1 - Safety, Supply Chain, Release, And CI
 
-Scope: lightweight static audit only. No files were changed except this report.
-
-## Summary
-
-<repo type and overall alignment>
-
-Main improvements:
-
-- ...
-
-## Priority Findings
-
-### P1 - <finding>
-
-Evidence:
-
-- `<path>` ...
-
-House style:
-
-- `<standard>.md` says ...
-
-Suggested change:
-
-- ...
-
-## Compliant / Good Patterns
-
-- ...
-
-## Not Applicable
-
-- ...
-
-## Suggested First PR
-
-1. ...
-
-## Suggested Second PR
-
-1. ...
+- [ ] **HS-1 - <actionable title>.** <Concrete repository evidence>. <What the applicable house-style standard requires>. Done when <observable completion criteria>.
 ```
+
+Roadmap rules:
+
+- Add the standard checkbox legend near the top of the roadmap if it does not already have one.
+- Keep each finding actionable without requiring the original conversation or a separate report.
+- Cite concrete paths and relevant external settings in the task text.
+- Use `[ ]` for unresolved work and `[~]` only when evidence shows meaningful partial completion.
+- Preserve existing `HS-*` identifiers and assign the next unused number. Never renumber or reuse identifiers.
+- Do not reset a completed `[x]` item during a later audit unless the completed control demonstrably regressed; create a new item that references the regression instead.
+- Update an existing open task when the new finding is the same underlying gap; do not append duplicates on every audit.
+- Keep compliant patterns concise and do not turn them into tasks.
 
 Priority scale:
 
@@ -142,24 +128,24 @@ Priority scale:
 - `P2` - important workflow or standards gap that should be fixed soon.
 - `P3` - polish, consistency, or worthwhile future enforcement.
 
-Completion criterion: the report is actionable without reading the conversation that produced it.
+Completion criterion: every unresolved finding is represented by one stable, checkable roadmap item and no standalone audit file is created.
 
-### 5. Validate
+### 6. Validate
 
-Run a whitespace check on the audit file:
+Run a whitespace check on the roadmap file:
 
 ```sh
-git -C <target> diff --check -- HOUSE-STYLE-AUDIT.md
+git -C <target> diff --check -- <roadmap-path>
 ```
 
-Then check target status and mention any pre-existing dirty/untracked files separately from the audit file.
+Run the repository's Markdown lint and spelling checks against the roadmap when available. Then check target status and mention pre-existing dirty or untracked files separately from the roadmap update.
 
-Completion criterion: the audit file passes `git diff --check`, and the final response names the file written plus the main findings.
+Completion criterion: the roadmap passes available checks, and the final response names the roadmap updated plus the main findings.
 
 ## Guardrails
 
 - Do not make compliance fixes during the audit.
-- Do not overwrite an existing `HOUSE-STYLE-AUDIT.md` without reading it first and preserving useful previous content.
+- If a legacy `HOUSE-STYLE-AUDIT.md` exists, read it and migrate still-relevant open findings into the roadmap. Remove the legacy file only when the user requests cleanup or its useful content is demonstrably preserved.
 - Do not revert or clean unrelated target-repo changes.
 - Do not treat house style as one-size-fits-all; content repos, clinical repos, CLI repos, and presentation repos have different applicable standards.
 - Prefer concrete evidence over generic advice.
