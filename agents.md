@@ -38,6 +38,12 @@ Treat an agent as a capable junior developer: give it a clear, well-scoped task 
 - Agent-generated tests must not be the sole basis for accepting high-consequence behaviour. Review their assumptions and include source-derived vectors or other independent evidence where applicable.
 - Record safety-relevant changes, hazards, evidence, and review decisions in the same PR and documentation trail as the implementation.
 
+### Fix the class, not just the instance
+
+For every bug fix, identify the violated invariant and search for the same failure mode in shared helpers, sibling implementations, alternative formats, and other callers. Fix confirmed instances at the narrowest appropriate shared boundary, and add regression coverage for the original case and representative related paths. Preserve intentional differences between contexts; do not apply blanket sanitizers or unrelated refactors. Report the scope checked, exceptions, and concrete follow-ups for findings that cannot safely be addressed in the same change. Do not claim class-wide coverage from a single passing reproduction.
+
+This requires systematic investigation, not an unbounded rewrite. The scope of the search should follow the failure mechanism: for example, unsafe output interpolation calls for checking other writers and output formats, while an incorrect query helper calls for checking all its consumers. Keep fixes evidence-led and coherent; separate larger changes or decisions into explicit follow-up work rather than silently skipping them or expanding the patch without limit.
+
 ## Agent Git handoff
 
 After completing a validated coherent parcel, agents should inspect the diff, commit it, and push it using the repository's branching workflow. The remote repository is shared state for scheduled agents and collaborators, so leaving completed work only in a local worktree risks duplicated or conflicting changes.
@@ -131,6 +137,7 @@ This file is the entry point for AI coding agents. Read it before changing anyth
 
 ## Assurance
 
+- Follow the house-style [class-wide fix directive](https://github.com/pacharanero/house-style/blob/main/agents.md#fix-the-class-not-just-the-instance): investigate the failure mechanism across related implementations, test representative paths, and report exceptions.
 - Review the diff and validation results after agent changes.
 - For <high-consequence areas>, validate behaviour against <authoritative source or evidence>.
 
