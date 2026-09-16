@@ -68,6 +68,28 @@ Prefer OpenID Connect (OIDC) or an equivalent workload identity to long-lived cl
 
 Where a long-lived secret is unavoidable, scope it to one environment and service, restrict its readers, record its owner and rotation procedure, rotate it on suspicion or role change, and remove it when workload identity becomes available.
 
+## Skip predictable failures on forks and Dependabot PRs
+
+A job that needs a repository secret cannot succeed on a pull request from a fork, or on a pull request opened by Dependabot: GitHub does not pass Actions secrets to either case, by design, so a malicious PR cannot exfiltrate them. Letting the job run anyway produces a failed check and a failure-notification email on every affected PR - noise that is entirely predictable and tells the maintainer nothing about the change.
+
+Gate the specific job or step that needs the secret, not the whole workflow: the credential-free checks (`fmt`, `clippy`, `test`) still give real signal on a fork or Dependabot PR and should keep running.
+
+```yaml
+jobs:
+  release-preview:
+    if: github.event_name != 'pull_request' || (!github.event.pull_request.head.repo.fork && github.actor != 'dependabot[bot]')
+    runs-on: ubuntu-latest
+    steps:
+      - run: ./publish-preview.sh
+        env:
+          DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+```
+
+- Condition on `!github.event.pull_request.head.repo.fork` to skip a job for a fork PR, and on `github.actor != 'dependabot[bot]'` to skip it for a Dependabot PR; combine both where a job needs either guard.
+- Apply the guard to the job or step that uses the secret, never to the whole workflow, so the unrelated checks keep reporting real results.
+- Do not work around this by exposing the secret to forks or Dependabot: GitHub's separation of secrets from fork- and Dependabot-triggered runs is a security control, not an obstacle to route past. Where a Dependabot PR genuinely needs a credential, grant it as a [Dependabot secret](https://docs.github.com/en/code-security/reference/secret-security/secret-types) rather than loosening the workflow condition, and only for a credential Dependabot is meant to hold.
+- A skipped job reports as skipped, not failed, so a branch-protection required check still gates the merge once it runs in a trusted context (a maintainer's push, or after `/ok-to-test`-style promotion). Treat a repeated failure on a trusted branch as a real defect, not a reason to widen the skip condition.
+
 ## Security audit (Rust)
 
 Run `cargo audit` as its own CI job so a dependency with a published [RustSec](https://rustsec.org) advisory fails the build - caught on the next push rather than waiting on a Dependabot email (and `cargo audit` catches advisories Dependabot doesn't, e.g. `unsound` ones, and picks up an advisory whose fixed-version range was revised after Dependabot's first alert). Install the prebuilt binary rather than building from source:
