@@ -13,6 +13,25 @@ How command-line tools are shaped. The cross-cutting essentials in [AGENTS.md](A
 - **Command order is deliberate.** When listing commands in help, docs, or a bare invocation, choose exactly one ordering strategy and keep it consistent: either simple alphabetical order for easy lookup, or logical groups ordered by workflow with the most common / most important commands first. Do not let enum declaration drift become the user-facing order. If using logical groups, separate them with headings where the surface is large enough to need scanning.
 - **Reset SIGPIPE on Unix** at startup so output pipes cleanly into `head`/`less` instead of panicking on a closed pipe.
 
+## Selecting one, some, or all targets
+
+When a command normally accepts one named target, use `--all` as the canonical unfiltered all-target selector. Do not introduce positional `all` as a sentinel for an ordinary name: it collides with a legitimate target named `all`, composes poorly when the command has other positional arguments, and is less visibly control syntax in scripts and review.
+
+```text
+tool inspect <target>
+tool inspect --all
+tool inspect --selector production
+```
+
+- **Use mutually exclusive explicit selectors.** A target name, `--all`, and a subset selector such as `--selector`, `--tags`, or `--filter` are alternatives unless their intersection semantics are deliberately designed and documented. An empty subset selector is an error, never an accidental all-target operation.
+- **Omission may mean all only for inherently read-only collection commands.** This is conventional for commands such as `kubectl get` and AWS `describe-*`, where there is no plausible current/default target. Do not reinterpret omission as all for a mutation: a missing shell variable must not broaden a write.
+- **Broad mutations require explicit scope.** Require names, a subset selector, or `--all`; show the resolved targets/count in `--dry-run` or a plan; require confirmation unless `--yes` or an equivalent automation flag is present. Keep scope and confirmation separate: `--all` selects targets, while `--yes` suppresses interaction and `--force` bypasses a specific safeguard.
+- **Use positional `all` only inside a real selector language.** Ansible's positional `all` is coherent because that argument is documented as a host-pattern expression supporting groups, intersections, and exclusions. An ordinary resource-name positional is not such a language.
+- **Use a dedicated bulk verb only when its semantics differ materially.** Docker's `prune` and Terraform's `destroy` define distinct eligibility, planning, or confirmation behavior. Do not add singular/plural command pairs merely to encode cardinality.
+- **Preserve shipped positional spellings as compatibility aliases.** Add the canonical `--all` form when touching the selector surface, document it first, and retain a shipped `tool command all` spelling unless a deliberate breaking migration is justified.
+
+This follows the common split visible in [`kubectl get` and `delete`](https://kubernetes.io/docs/reference/kubectl/), [AWS EC2 describe and terminate commands](https://docs.aws.amazon.com/cli/latest/reference/ec2/), [`gh cache delete`](https://cli.github.com/manual/gh_cache_delete), [Ansible host patterns](https://docs.ansible.com/projects/ansible/latest/inventory_guide/intro_patterns.html), [`docker container prune`](https://docs.docker.com/reference/cli/docker/container/prune/), and [`terraform destroy`](https://developer.hashicorp.com/terraform/cli/commands/destroy): safe reads may imply a collection, broad writes are explicit, and positional `all` belongs to selector grammars rather than ordinary names.
+
 ## Output: data on stdout, everything else on stderr
 
 The single most important rule for a composable CLI: **stdout carries the result; stderr carries hints, progress, and errors.** A user piping `tool x | jq` must get clean data on stdout, with any "did you mean..." guidance going to stderr where it cannot corrupt the stream. [`pacharanero/clincalc`](https://github.com/pacharanero/clincalc)'s `clincalc <name>` prints the JSON input template to stdout and the fill-it-in hint to stderr; `s/size` prints the table to stdout and tips to stderr. Get this wrong and the tool is unscriptable.
