@@ -17,7 +17,7 @@ For mature repos where `AGENTS.md` is already the living source of truth, it can
 Every agent instruction file should include:
 
 - **Project purpose**: one short paragraph saying what the repo is and what it is not.
-- **Read first**: links to the README, roadmap/spec docs, domain context, and the adopted house-style standard.
+- **Read first**: links to the README, roadmap/spec docs, domain context, and the adopted house-style standard. Before creating or restructuring a roadmap file, follow [specs.md](specs.md#status-markers-in-roadmaps)'s status-checkbox and stable-identifier conventions rather than inventing a local scheme.
 - **Core invariants**: the small number of rules that must not be violated. Examples: a core crate stays a leaf; clinical calculations cite primary literature; generated files are not hand-edited.
 - **Local workflow**: the canonical `s/` scripts and validation commands.
 - **Before every commit**: the exact checks CI enforces.
@@ -107,7 +107,7 @@ This file is the entry point for AI coding agents. Read it before changing anyth
 ## Read First
 
 - [README.md](README.md) - setup and project overview.
-- [ROADMAP.md](ROADMAP.md) - planned work.
+- [ROADMAP.md](ROADMAP.md) - planned work. Status checkboxes and stable `R<number>` identifiers per [house-style's roadmap conventions](https://github.com/pacharanero/house-style/blob/main/specs.md#status-markers-in-roadmaps).
 - [spec/README.md](spec/README.md) - design/spec index, if present.
 - [CONTEXT.md](CONTEXT.md) - domain language, if present.
 - [pacharanero/house-style](https://github.com/pacharanero/house-style) - cross-repo standards, when adopted.
