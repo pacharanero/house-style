@@ -26,6 +26,7 @@ Start with **[AGENTS.md](AGENTS.md)** (the index and cross-cutting essentials). 
 
 Supporting files:
 
+- [roadmap.md](roadmap.md) - proposed improvements to the standards, pending review and adoption
 - [examples/](examples/) - copyable script, Rust CLI, and governance examples for agents and humans
 - [skills/](skills/) - canonical reusable agent skills that can be copied into an agent platform's documented skill location
 - [commands/](commands/) - slash-command wrappers that point to canonical skills or workflows
