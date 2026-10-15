@@ -21,7 +21,7 @@ Every agent instruction file should include:
 - **Core invariants**: the small number of rules that must not be violated. Examples: a core crate stays a leaf; clinical calculations cite primary literature; generated files are not hand-edited.
 - **Local workflow**: the canonical `s/` scripts and validation commands.
 - **Before every commit**: the exact checks CI enforces.
-- **Git workflow**: whether agents commit and push directly to `main` or must use a branch and PR. In the absence of a local exception, follow [commits.md](commits.md): commit and push each validated coherent parcel.
+- **Git workflow**: agents commit each validated coherent parcel by default. State separately whether pushes are automatic or require a user request, and whether permitted pushes go directly to `main` / `live` or through a branch and PR. In the absence of a local push policy, do not push without an explicit user request; see [commits.md](commits.md).
 - **External actions**: what needs explicit approval, such as publishing releases, deleting branches, force-pushing, posting issues, or running scans against third-party systems.
 - **Protected paths and environments**: code owners, release or deployment paths, and the branch-protection tier where these matter; see [ci.md](ci.md).
 
@@ -46,9 +46,9 @@ This requires systematic investigation, not an unbounded rewrite. The scope of t
 
 ## Agent Git handoff
 
-After completing a validated coherent parcel, agents should inspect the diff, commit it, and push it using the repository's branching workflow. The remote repository is shared state for scheduled agents and collaborators, so leaving completed work only in a local worktree risks duplicated or conflicting changes.
+After completing a validated coherent parcel, agents should inspect the diff and commit it without waiting for a separate request. Push only when the repository's local instructions authorize automatic pushing or the user explicitly requests it. The remote repository is shared state for scheduled agents and collaborators, but an unrequested push is still an externally visible action.
 
-For a new or fast-moving repository with one or two active contributors, direct commits to `main` or `live` are the default unless local instructions say otherwise. For a mature repository with several contributors, a protected default branch, or a PR convention, agents use a descriptive feature branch and push it for PR review. Ask when the repository state or intended workflow is unclear.
+For a new or fast-moving repository with one or two active contributors, direct commits to `main` or `live` are the default unless local instructions say otherwise. For a mature repository with several contributors, a protected default branch, or a PR convention, agents use a descriptive feature branch and prepare it for PR review. Pushing either form still follows the repository's explicit push policy. Ask when the repository state or intended workflow is unclear.
 
 ## Agent artefacts
 
@@ -130,7 +130,8 @@ This file is the entry point for AI coding agents. Read it before changing anyth
 
 ## Git Workflow
 
-- Commit and push each validated coherent parcel; do not leave completed work only locally.
+- Commit each validated coherent parcel; do not leave completed work uncommitted.
+- Push only when local instructions authorize automatic pushing or the user explicitly requests it.
 - Use direct `main` / `live` commits for fast-moving work with one or two contributors when permitted.
 - Use a descriptive branch and PR for mature collaborative or protected repositories.
 - Ask if the appropriate path is unclear.
