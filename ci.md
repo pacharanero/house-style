@@ -11,7 +11,35 @@ A single `ci.yml` running on `push` to `main` and on `pull_request` (plus `workf
 5. REUSE compliance (see [licensing.md](licensing.md)) - `fsfe/reuse-action`
 6. `zizmor --strict-collection .` - static security analysis of workflows, local actions, and Dependabot configuration (see below)
 
-Toolchain via `dtolnay/rust-toolchain` (stable, components `rustfmt, clippy`); cache via `Swatinem/rust-cache`. Checks 1-3 are the same ones every contributor runs locally before committing, so CI never surprises.
+Toolchain via plain `rustup` and a committed `rust-toolchain.toml`, not an Action - see below. Cache via `Swatinem/rust-cache`. Checks 1-3 are the same ones every contributor runs locally before committing, so CI never surprises.
+
+## Rust toolchain setup (rustup, not an Action)
+
+Do not use `dtolnay/rust-toolchain` (or any other toolchain-installer Action). Install the toolchain with plain `rustup`, reading a committed `rust-toolchain.toml`:
+
+```toml
+# rust-toolchain.toml
+[toolchain]
+channel = "1.95.0"
+profile = "minimal"
+components = ["clippy", "rustfmt"]
+```
+
+```yaml
+- name: Set up pinned Rust toolchain
+  shell: bash
+  run: |
+    rustup toolchain install --no-self-update
+    rustup show active-toolchain
+    rustc --version
+    cargo --version
+```
+
+`rustup toolchain install` with no channel argument reads the repo's `rust-toolchain.toml` override and installs exactly that pin, with that profile and those components. `rustup` ships preinstalled on every GitHub-hosted runner (Linux, macOS, Windows), so this needs no Action at all - and because the pin lives in a file `rustup` honours everywhere, a contributor's local `cargo build` picks up the identical toolchain automatically, which a CI-only Action input never guaranteed.
+
+This is a correction, not a style preference: `dtolnay/rust-toolchain` has no versioned releases. Per its own README, the Rust toolchain it installs is selected by *which ref of the Action* you request - `@1.89.0` installs Rust 1.89.0, `@stable` installs current stable, and `@v1` is a permanently floating alias the maintainer force-moves to track `master` over time. SHA-pinning `@v1` the normal way (`uses: dtolnay/rust-toolchain@<sha> # v1`) therefore pins a moving target: the SHA periodically stops matching what `v1` currently resolves to, which is exactly what zizmor's `ref-version-mismatch` check flags, repeatedly, across every repo that does this. This is working as designed, not a bug: see [dtolnay/rust-toolchain#180](https://github.com/dtolnay/rust-toolchain/issues/180), open and unaddressed since March 2026, where several people hit the same drift and more than one independently landed on "just use rustup" as the fix - including the issue's own author, in a different project. Don't file a new issue asking for frozen version tags; it's already been asked, it conflicts with how `@stable`/`@nightly` need to work for the Action's other callers, and the maintainer has not engaged with the request in over half a year.
+
+If a repo genuinely doesn't want a committed `rust-toolchain.toml` (for example, several binaries in one repo that would otherwise need their own override), it may instead hardcode the channel directly in the workflow step - `rustup toolchain install stable --profile minimal --component rustfmt,clippy` - but prefer the committed-file form above for any repo with a single toolchain to pin, since it also covers local development.
 
 ## GitHub Actions security
 
@@ -123,11 +151,10 @@ Pin actions to a full commit SHA with a trailing `# vX.Y.Z` comment:
 
 ```yaml
 uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
-uses: dtolnay/rust-toolchain@e97e2d8cc328f1b50210efc529dca0028893a2d9 # v1
 uses: taiki-e/install-action@a6b2e2dcd845ddd7f509ce4f3ed3d922b80cc5d9 # v2.84.0
 ```
 
-Before adding or bumping an action, fetch its repo to confirm the current latest stable tag and its SHA - never pin from memory. Use the `pin-github-action` tool's convention.
+Before adding or bumping an action, fetch its repo to confirm the current latest stable tag and its SHA - never pin from memory. Use the `pin-github-action` tool's convention. Exception: do not add `dtolnay/rust-toolchain` at all - see [Rust toolchain setup](#rust-toolchain-setup-rustup-not-an-action) above.
 
 ## Dependabot
 
