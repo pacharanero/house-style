@@ -4,8 +4,21 @@
 
 Choose the copyright holder and any company affiliation from the project's domain and use it consistently in SPDX headers, REUSE annotations, package metadata, notices, documentation, and public project branding:
 
-- A project may be personal, affiliated with an organisation such as Koloki Ltd or Baw Medical Ltd, or have another deliberate arrangement.
+- A project may be personal, affiliated with one of the organisations below, or have another deliberate arrangement.
 - For mixed-domain or unclear work, confirm the intended holder rather than guessing. Existing project ownership and licensing history takes precedence; never silently relicense a repository while changing its affiliation.
+
+### Affiliations
+
+Most projects belong to one of these organisations. The list is not exhaustive and other affiliations may arise; for a repository that matches none of them, ask. Where an organisation gains its own supplementary or separate house style, it is linked here and takes precedence for that organisation's repositories.
+
+| Organisation | GitHub | `SPDX-FileCopyrightText` holder | Notes |
+| --- | --- | --- | --- |
+| Baw Medical Ltd | usually [`pacharanero`](https://github.com/pacharanero) | `Marcus Baw and Baw Medical Ltd` | Contact domain `bawmedical.co.uk`. |
+| Koloki Ltd | [`koloki-co`](https://github.com/koloki-co) | `Marcus Baw and Koloki Ltd` | Older repositories use other forms; match the repository's existing form. |
+| Royal College of Paediatrics and Child Health (RCPCH) | [`rcpch`](https://github.com/rcpch) | `Royal College of Paediatrics and Child Health` | |
+| Open Health Technology Foundation (OHTF), legally Open Health Technology CIC | [`ohtf`](https://github.com/ohtf) | A project transferred to OHTF keeps its existing holder; OHTF's own content uses `Open Health Technology Foundation contributors` | Contributions need DCO sign-off; follow the contribution and security policies at [openhealthtechnology.org](https://openhealthtechnology.org). |
+
+The licence is chosen per project, not per organisation: read the repository's root licence file.
 
 ## Choose a licence deliberately
 
