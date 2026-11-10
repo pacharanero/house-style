@@ -50,6 +50,8 @@ After completing a validated coherent parcel, agents should inspect the diff and
 
 For a new or fast-moving repository with one or two active contributors, direct commits to `main` or `live` are the default unless local instructions say otherwise. For a mature repository with several contributors, a protected default branch, or a PR convention, agents use a descriptive feature branch and prepare it for PR review. Pushing either form still follows the repository's explicit push policy. Ask when the repository state or intended workflow is unclear.
 
+When opening a PR, keep the visible description to a two-or-three-line summary and fold the agent-written detail into a `<details><summary>` block named after the model, as set out in [commits.md](commits.md#pull-request-descriptions). A long, unfolded PR description is a defect, not thoroughness.
+
 ## Agent artefacts
 
 Scratch output from agent tooling is session state, not project content. Gitignore it in every repo, not only new ones.
@@ -134,6 +136,7 @@ This file is the entry point for AI coding agents. Read it before changing anyth
 - Push only when local instructions authorize automatic pushing or the user explicitly requests it.
 - Use direct `main` / `live` commits for fast-moving work with one or two contributors when permitted.
 - Use a descriptive branch and PR for mature collaborative or protected repositories.
+- PR descriptions: a two-or-three-line visible summary, then detail folded in `<details><summary>` (see [house-style](https://github.com/pacharanero/house-style/blob/main/commits.md#pull-request-descriptions)).
 - Ask if the appropriate path is unclear.
 
 ## Assurance

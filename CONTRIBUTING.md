@@ -14,7 +14,7 @@ Search existing issues and pull requests before opening a new one. Discuss non-t
 4. Distinguish a reusable standard from a project-specific exception.
 5. Update examples and cross-references when they are affected.
 6. Run the documented validation checks before pushing.
-7. Explain the change and its rationale in the pull request description.
+7. Open the pull request description with a two-or-three-line summary of the change and why; fold longer rationale and verification into a `<details><summary>` block (see [commits.md](https://github.com/pacharanero/house-style/blob/main/commits.md#pull-request-descriptions)).
 
 ## Direction
 

@@ -67,6 +67,37 @@ Do not hand-edit a release commit after tagging. If something is wrong, fix forw
 
 Dependabot PRs should land as `chore(deps): ...` unless the dependency update directly fixes a user-visible bug. Grouped routine minor/patch PRs are expected; high/critical security fixes can be reviewed and merged outside the weekly routine.
 
+## Pull request descriptions
+
+A reviewer should be able to tell what a PR is for, and whether it needs their attention, in a few seconds. Agents write accurate, complete PR descriptions, but the length puts readers off before they find the point. Put the short summary in view and fold everything else, following Simon Willison's [details-summary pattern](https://simonwillison.net/2026/Nov/9/details-summary/).
+
+- **Opener, always visible: two or three lines at most.** Say what the PR achieves and why, in plain language. Add how it was done only where that is the point of the PR. A screenshot, or short command output, can replace a paragraph. Leave out file lists, test counts, and process narration.
+- **Everything else goes inside `<details><summary>`.** Rationale, design alternatives, verification steps, test output, and follow-ups can all go there, in as much detail as is useful. GitHub renders the block collapsed.
+- **Name the author in the summary line.** For agent-written detail, use the model name and effort level where it is known, for example `<summary>Claude Opus 5.5 (medium effort)</summary>`. For a human author, use a description such as `<summary>Implementation notes and verification</summary>`.
+- **Keep required review signals in the opener.** Breaking changes, migrations, security or clinical-safety impact, and anything the reviewer must decide go in the visible lines, not in the folded detail.
+- **Keep the opener up to date.** When the PR changes scope during review, rewrite the opener. Do not leave it describing the first push.
+
+Remember the tag order as "details-summary": `<details>` wraps everything, and `<summary>` is its first child. Leave a blank line after `</summary>` so the Markdown inside renders.
+
+```markdown
+Rejects unrecognised `config.toml` keys at load time, so a typoed strictness setting can no longer silently fall back to its lenient default.
+
+<details>
+<summary>Claude Opus 5.5 (medium effort)</summary>
+
+## Problem
+
+...
+
+## Verification
+
+...
+
+</details>
+```
+
+The [PR template](examples/new-repo-template/pull-request-template.md) follows this shape.
+
 ## Squash and merge
 
 For ordinary feature PRs, squash or merge according to the repo's local preference. For release PRs in the CI auto-tag cascade, prefer merge commits so the `chore(release): vX.Y.Z` commit survives unchanged and git-cliff can skip it reliably.

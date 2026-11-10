@@ -18,7 +18,7 @@ Feature requests should describe the underlying problem before proposing a solut
 2. Keep the pull request focused on one coherent change.
 3. Run the repository's documented validation commands before pushing.
 4. Update documentation, tests, safety evidence, and changelog entries when they apply.
-5. Explain the change and its rationale in the pull request description.
+5. Open the pull request description with a two-or-three-line summary of the change and why; fold longer rationale and verification into a `<details><summary>` block (see [commits.md](https://github.com/pacharanero/house-style/blob/main/commits.md#pull-request-descriptions)).
 
 ## Direction
 
