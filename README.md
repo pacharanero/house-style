@@ -14,6 +14,7 @@ Start with **[AGENTS.md](AGENTS.md)** (the index and cross-cutting essentials). 
 - [licensing.md](licensing.md) - SPDX headers, REUSE, and content licensing
 - [new-repos.md](new-repos.md) - new repo scaffolding and setup runbook
 - [presentations.md](presentations.md) - Reveal.js CDN slide decks, presentation style, local serving
+- [publicity.md](publicity.md) - milestone posts, per-project channels, compose links, and the work journal
 - [private-workspace.md](private-workspace.md) - gitignored local-only decks, reports, captures, and notes
 - [repo-presentation.md](repo-presentation.md) - README structure, quick start, badges, visuals, and repo metadata
 - [security.md](security.md) - scope, secrets hygiene, and reproducible security workflows

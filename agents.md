@@ -145,6 +145,13 @@ This file is the entry point for AI coding agents. Read it before changing anyth
 - Review the diff and validation results after agent changes.
 - For <high-consequence areas>, validate behaviour against <authoritative source or evidence>.
 
+## Publicity
+
+- Owner: <organisation or person>
+- Channels: <public handles or pages>
+
+Suggest a post at milestones per [house-style publicity](https://github.com/pacharanero/house-style/blob/main/publicity.md). Never post without approval.
+
 ## Approval Required
 
 Ask before publishing releases, deleting branches, force-pushing, changing secrets, bypassing branch protection or deployment approvals, or taking externally visible actions.

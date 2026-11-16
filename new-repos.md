@@ -53,7 +53,8 @@ Use badges only when they carry real information. CI, licence, release version, 
 7. Add Dependabot for the ecosystems actually present.
 8. Set the Solo `main` protection baseline: require CI, block force pushes and deletion, and document any deliberate exception. Select a higher tier from [ci.md](ci.md) before accepting collaborators, deploying production workloads, or handling high-consequence code.
 9. For clinical or health-informatics software that can affect care, create `SAFETY.md` and record a medical-device applicability assessment at inception. See [clinical-safety.md](clinical-safety.md).
-10. Link agent instructions to the adopted standards, for example <https://github.com/pacharanero/house-style/blob/main/AGENTS.md>.
+10. Record the project's owner and publicity channels in a `## Publicity` section of the agent instructions. See [publicity.md](publicity.md#per-project-channels).
+11. Link agent instructions to the adopted standards, for example <https://github.com/pacharanero/house-style/blob/main/AGENTS.md>.
 
 ## Do not over-scaffold
 
