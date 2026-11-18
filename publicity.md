@@ -33,7 +33,7 @@ Choose channels from the project's owner and audience. The [affiliations table](
 
 - Write in the maintainer's voice, not a generic "professional" register. Where a voice reference is available in the private notes, sample it before drafting.
 - One short post per channel, sized to the channel's limit. Lead with what the work does for the reader, then link to it. Prefer a link to the release notes, docs, or repo over a long description.
-- Follow [the Markdown and prose rules](AGENTS.md#cross-cutting-essentials): hyphens, not emdashes, and no inflated claims.
+- Follow [writing.md](writing.md), especially its [patterns to avoid](writing.md#patterns-to-avoid): posts are where inflated, promotional wording is most tempting.
 
 ## Posting by compose link
 

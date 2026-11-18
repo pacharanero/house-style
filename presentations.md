@@ -75,7 +75,7 @@ Favour fewer words and more images.
 
 Avoid long paragraphs, crowded slides, decorative gimmicks, and multiple unrelated ideas on one slide.
 
-Use hyphens, not emdashes, in visible text.
+Use hyphens, not emdashes, in visible text (see [writing.md](writing.md)).
 
 ## Images and assets
 

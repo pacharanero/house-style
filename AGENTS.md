@@ -46,6 +46,7 @@ Canonical reusable skills live under [skills/](skills/). Slash-command wrappers 
 - [tauri-gui.md](tauri-gui.md) - Tauri 2 + React + Mantine + Vite desktop GUI shape.
 - [testing.md](testing.md) - registry/policy enforcement tests, golden/literature-vector tests, filesystem/git test isolation.
 - [ui.md](ui.md) - domain-specific interface design, controls, copy, accessibility, and visual verification.
+- [writing.md](writing.md) - prose for docs, commits, PRs, roadmaps, and hand-offs: defaults, formatting, and AI-writing patterns to avoid.
 
 Deferred: a fuller "one core, many surfaces" engine-surface standard. [library-extraction.md](library-extraction.md) keeps the current leaf-crate guidance for now.
 
@@ -72,6 +73,6 @@ The things that apply to (nearly) every project, in brief. The files above expan
 - **Private workspace**: use a root gitignored `.private/` for intentionally retained local-only decks, reports, captures, and notes. Agents should suggest it when useful local output should survive the session but must not be committed. See [private-workspace.md](private-workspace.md).
 - **Repo presentation**: lead with a one-liner, hero visual, and a prominent quick start. Use only informative badges. Keep the README honest, maintained, and linked to the docs site. See [repo-presentation.md](repo-presentation.md).
 - **User interfaces**: design from the domain and frequent workflow, use concrete copy and familiar controls, avoid generic SaaS/card-grid defaults, meet WCAG 2.2 AA, and inspect rendered mobile/tablet/desktop states before considering frontend work complete. See [ui.md](ui.md).
-- **Prose & files**: Markdown is not hard-wrapped (one long line per paragraph, soft wrap). Use hyphens, not emdashes. Filenames are slug-case-with-hyphens, except recognised conventions (`README.md`, `AGENTS.md`, `Cargo.toml`).
+- **Prose & files**: before writing any prose (docs, commits, PRs, roadmap items, hand-offs), follow [writing.md](writing.md): lead with the point, no hard-wrapping, hyphens not emdashes, and none of the listed AI-writing patterns. Filenames are slug-case-with-hyphens, except recognised conventions (`README.md`, `AGENTS.md`, `Cargo.toml`).
 
 Projects may install or link these standards from their own agent instructions; installation is optional and must not depend on a particular workstation layout.

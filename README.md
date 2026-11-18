@@ -24,6 +24,7 @@ Start with **[AGENTS.md](AGENTS.md)** (the index and cross-cutting essentials). 
 - [tauri-gui.md](tauri-gui.md) - Tauri desktop GUI shape
 - [testing.md](testing.md) - policy tests, goldens, and test isolation
 - [ui.md](ui.md) - interface design, accessibility, copy, responsive states, and visual verification
+- [writing.md](writing.md) - prose defaults and AI-writing patterns to avoid
 
 Supporting files:
 
