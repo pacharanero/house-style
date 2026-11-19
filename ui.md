@@ -117,6 +117,21 @@ A frontend change is not complete because it compiles. Inspect the rendered inte
 9. Review a full-page screenshot with the text mentally removed: does the structure still reflect this product, or is it interchangeable rows of cards?
 10. Ask a person unfamiliar with the implementation to identify the page purpose and primary action from the first viewport.
 
+## Single-product sites
+
+A landing site for one product rarely needs a framework or a build step. [rukoo.io](https://rukoo.io/) is the reference example: one hand-written HTML page, one stylesheet (about 51 KB), and one small script (about 20 KB), served as static files. It is a good model for a site like Turva's.
+
+What makes it work, and what to copy:
+
+- Write the design rules at the top of the stylesheet: one theme, one accent family, a radius rule per kind of element. Agents editing the site later then keep to them instead of inventing new values.
+- Hold colours, lines, and surfaces in CSS custom properties, and use those tokens everywhere.
+- Let CSS do the motion: small `@keyframes`, scroll-linked animation behind `@supports (animation-timeline: scroll())`, `clamp()` for fluid type, and `text-wrap` for headings.
+- Keep JavaScript to a few independent behaviours, each guarded so a missing element on another page does no harm. Use `IntersectionObserver` for reveal-on-scroll. Honour `prefers-reduced-motion`, and add an `html.js` class so the page still works without JavaScript.
+- Make it fast: self-hosted variable fonts subset with `unicode-range` and preloaded, a preloaded AVIF hero image with `fetchpriority="high"`, and icons from one SVG sprite.
+- Give it one piece of personality that belongs to the product. Rukoo's pigeon mascot follows the pointer and coos when clicked. That beats generic gradients and stock illustrations.
+
+Everything in this standard still applies, including the preflight below.
+
 ## Generic UI preflight
 
 Before calling an agent-built or rapidly scaffolded interface ready, check:
