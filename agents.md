@@ -35,6 +35,7 @@ Treat an agent as a capable junior developer: give it a clear, well-scoped task 
 
 - Read the diff and run the relevant validation after agent work. Do not accept a passing test suite without checking what the tests actually prove.
 - For clinical logic, safety-critical workflows, authentication, cryptography, authorisation, input validation, or code handling real patient data, validate the behaviour independently against an authoritative source, threat model, or reviewed clinical evidence.
+- For SNOMED CT or other coded-terminology bindings, verify concept identifiers and ECL expressions with a local terminology tool (such as `sct`, if installed) rather than recalling them from memory. A plausible-looking but wrong concept ID is a silent clinical-safety defect, not a harmless typo - it passes every structural check and fails only on meaning.
 - Agent-generated tests must not be the sole basis for accepting high-consequence behaviour. Review their assumptions and include source-derived vectors or other independent evidence where applicable.
 - Record safety-relevant changes, hazards, evidence, and review decisions in the same PR and documentation trail as the implementation.
 
