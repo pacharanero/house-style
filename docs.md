@@ -19,41 +19,34 @@ Files at repo root:
 
 These rules come from a cross-project migration sweep. They are part of house style because they catch the failures that make a site appear "mostly migrated" while still breaking in CI.
 
-### No MkDocs plugin system
+### Plugin support
 
-Zensical currently has no general MkDocs plugin system. In `plugins:`, keep only things Zensical supports:
+Zensical natively reimplements a growing set of MkDocs plugins: the existing `mkdocs.yml` config usually works unchanged, and no separate `mkdocs-*` package is needed. Before touching `plugins:`, check what the repo's pinned version supports at <https://zensical.org/docs/compatibility/mkdocs/plugins/>.
 
-- `search` (built in)
-- `mkdocstrings` where needed
-- Zensical-native extensions/features such as GLightbox or macros, configured as Zensical documents them
+Behaviour to design around:
 
-Comment out unsupported MkDocs plugins instead of leaving them active. Preserve their config under comments so the feature can be restored when Zensical supports it:
+- Unsupported plugins are **silently ignored** - Zensical neither imports nor runs them, so they do not break the build, they just do nothing. Comment them out so the intent is visible.
+- Supported plugins **reject unknown settings** with a configuration error - a config that worked under MkDocs may need stale settings dropped (for example Material's `tags_file` is silently ignored by Zensical's native `tags`).
+- Git-history plugins need full history: any workflow that builds docs for a site using `git-revision-date-localized` must set `fetch-depth: 0` on its checkout step. Shallow clones warn in a normal build and are fatal under `--strict`.
+
+For plugins Zensical does not yet support, comment the plugin out of `plugins:` (preserving its config under `# ` prefixes) and comment the corresponding line in `requirements.txt`, with a link to the relevant Zensical backlog issue, and re-enable when resolved. Currently suspended across our repos:
+
+- `git-committers` -> suspend, <https://github.com/zensical/backlog/issues/17>
+- `with-pdf` -> suspend, <https://github.com/zensical/backlog/issues/25>
 
 ```yaml
 plugins:
   - search
-  # Plugins below are suspended pending Zensical module system support.
+  # Plugins below are suspended pending Zensical support.
   # Re-enable each once the corresponding Zensical issue is resolved.
   #
   # - git-committers:       # https://github.com/zensical/backlog/issues/17
   #     repository: org/repo
   #     branch: main
   #
-  # - git-revision-date-localized:  # https://github.com/zensical/backlog/issues/18
-  #     enable_creation_date: true
-  #
   # - with-pdf:             # https://github.com/zensical/backlog/issues/25
   #     cover_title: Project docs
 ```
-
-Common mappings:
-
-- `git-committers` -> suspend, backlog #17
-- `git-revision-date-localized` -> suspend, backlog #18
-- `with-pdf` -> suspend, backlog #25
-- `llmstxt` -> suspend, backlog #92
-- `macros` as a MkDocs plugin -> replace with `zensical.extensions.macros` under `markdown_extensions:`
-- `tags`, `awesome-pages`, `include-markdown`, `gen-files`, `literate-nav` -> no house-style default; comment out unless the repo has proved a current Zensical equivalent
 
 If commenting out a plugin would materially change navigation or generated content, write that explicitly into the migration notes rather than silently dropping it.
 
@@ -83,6 +76,44 @@ Before calling a migration done, run a grep sweep that proves the site is not ha
 - no active unsupported plugins under `plugins:`
 
 Known exceptions must be named explicitly: test fixtures, generated build artifacts (`target/`, `site/`), or application code that deliberately embeds MkDocs as a library.
+
+## Features and plugins our sites commonly use
+
+Inventory surveyed across the Zensical sites in `~/code` on 2026-11-22. New sites should start from this shape and deviate deliberately, recording the reason in the repo's own notes.
+
+### Plugins
+
+| Plugin | Native since | In use | Notes |
+| --- | --- | --- | --- |
+| `search` | built in | every site | Enabled by default even when unlisted. `lang` is ignored; search language follows the theme language |
+| `git-revision-date-localized` | 0.1.3 | clinicaldigitalmanifesto.org, digital-growth-charts-documentation, national-paediatric-diabetes-audit, rcpch-audit-engine, dcb0129-template | Last-update (and optionally creation) dates on pages. No `mkdocs-*` package needed. Usual settings: `type: date`, `enable_creation_date`. Pin `zensical>=0.1.3` and set `fetch-depth: 0` on CI checkouts |
+| `tags` | 0.0.58 | digital-growth-charts-documentation, charts | Material's `tags_file` setting is silently ignored; a tag index listing comes from a `<!-- material/tags -->` directive on a page |
+| `llmstxt` | 0.0.67 | digital-growth-charts-documentation | Generates the `llms.txt` index; `full_output: llms-full.txt` adds a full-text copy |
+| `mkdocstrings` | 0.0.11 | turva docs, DCSP (`mkdocs_dcsp`) | Python API reference docs; requires the `mkdocstrings-python` package in requirements |
+| macros | 0.0.40 | dcb0129-template, DCB0129 safety-file template | Not a `plugins:` entry - enable as `- zensical.extensions.macros` under `markdown_extensions:` |
+
+Still suspended everywhere: `git-committers` (backlog #17) and `with-pdf` (backlog #25). Where PDF export is genuinely needed, use a WeasyPrint pipeline as the digital-growth-charts-documentation repo does, not the suspended plugin.
+
+### Markdown extensions
+
+The explicit `markdown_extensions:` lists across our repos converge on one core: `admonition`, `attr_list`, `toc` (usually with `permalink: true`), `md_in_html`, `abbr`, `footnotes`, `def_list`, `tables`, and the `pymdownx.*` set - `highlight`, `inlinehilite`, `superfences`, `details`, `keys`, `snippets`, `tabbed`, `tasklist`, `emoji`. That is close to Zensical's own default set (see [defaults are wider than MkDocs](#markdown-extensions-defaults-are-wider-than-mkdocs)), so long explicit lists are mostly migration history. New sites should start minimal and add only what their content actually uses. Sites with emoji must use the Zensical module paths, not the Material ones:
+
+```yaml
+  - pymdownx.emoji:
+      emoji_index: !!python/name:zensical.extensions.emoji.twemoji
+      emoji_generator: !!python/name:zensical.extensions.emoji.to_svg
+```
+
+### Theme and site settings
+
+- `theme.variant` is the one theme decision that matters: `modern` for Zensical's own look, `classic` where the Material-like look matters for continuity. Current repos split roughly half and half; new sites default to `modern` (see [Tool: Zensical](#tool-zensical)).
+- `repo_url` and `repo_name` on almost every site; `copyright` and `extra_css` on most; `extra.social` on about a third; `extra.generator: false` on a few that hide the generator credit.
+- `docs/stylesheets/extra.css` is the conventional home for brand colours, referenced from `extra_css`.
+- One deliberate divergence: sites served by the DCSP app behind `X-Accel-Redirect`/`view_docs` set `use_directory_urls: false` so page paths map to flat files.
+
+### Version floors
+
+The `requirements.txt` pin must be at or above the version that introduced every plugin the site enables - for `git-revision-date-localized` that means `zensical>=0.1.3`. An old pin does not fail loudly: supported-plugin entries below their introduction version are silently ignored and the feature just never appears.
 
 ## Build and deploy
 
@@ -182,7 +213,7 @@ jobs:
         uses: actions/deploy-pages@cd2ce8fcbc39b97be8ca5fce6e763baed58fa128 # v5.0.0
 ```
 
-Configure the site URL for the chosen GitHub Pages location; add a `CNAME` file under `docs/` for a custom domain. SHA-pinning rule from [ci.md](ci.md) applies to every action above; bump SHAs only after fetching the action's repo to confirm the current latest tag (do not pin from memory).
+Configure the site URL for the chosen GitHub Pages location; add a `CNAME` file under `docs/` for a custom domain. SHA-pinning rule from [ci.md](ci.md) applies to every action above; bump SHAs only after fetching the action's repo to confirm the current latest tag (do not pin from memory). Sites using `git-revision-date-localized` must add `fetch-depth: 0` to the checkout step - with the default shallow clone every page shows the build commit's date, and strict builds fail outright (see [Plugin support](#plugin-support)).
 
 ## Local preview
 
