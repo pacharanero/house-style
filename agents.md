@@ -74,6 +74,16 @@ Intentionally retained local work is different from disposable agent output. Use
 
 After substantial work, consider whether a short optional [Reveal.js work digest](presentations.md#optional-work-digests) would materially reduce the user's context-recovery cost. This is especially useful when the user is working across many repositories or the change is best understood through a command demo, data flow, safety boundary, and evidence summary.
 
+## Long-running local work
+
+Some checks take hours and use every core: long fuzz runs, large property-test runs, full benchmark suites. Run during the day, they slow the maintainer's machine and are easily cut short.
+
+- If `overnight` is installed (`command -v overnight`), queue such work instead of running it in the session: `overnight add -n "<name>" -C <repo> -- <command>`. Queued jobs run once each, one at a time, at the lowest CPU and I/O priority, between 01:00 and 07:00; anything still running at 07:00 is stopped. Tell the user what you queued. Later, read the results with `overnight report` and the logs it lists.
+- Queue independent pieces as separate jobs (one fuzz target per job, for example), so one failure does not hide the others and a stopped job is easy to queue again.
+- Jobs run unattended: no prompts, and fetch dependencies in the session first (`cargo fetch`, `npm ci`) so a job does not depend on the network at 01:00.
+- Never queue anything that changes shared state: pushes, releases, deployments, messages.
+- Without `overnight`, ask before starting anything expected to keep the machine busy for more than a few minutes, and run it under `nice -n 19 ionice -c 3`.
+
 ## Read-first order
 
 Use this order unless the repo has a strong reason to differ:
