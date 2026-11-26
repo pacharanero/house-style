@@ -106,8 +106,8 @@ For ordinary feature PRs, squash or merge according to the repo's local preferen
 
 A merged branch has served its purpose. Left behind, branches accumulate until the graph no longer shows which work is live, and a stale branch invites someone to build on a base that has already moved.
 
-- **Turn on "Automatically delete head branches"** in the repository settings, so the remote branch goes when the PR merges without anyone remembering to do it. `gh repo edit --delete-branch-on-merge` sets it; `gh repo view --json deleteBranchOnMerge` confirms it.
-- **Merge with `gh pr merge --delete-branch`**, which removes the remote branch and the local checkout together.
+- **Turn on "Automatically delete head branches"** in the repository settings, so GitHub deletes the remote branch when the PR merges. Enable and verify this when creating a repo, as part of the [bootstrap runbook](new-repos.md#bootstrap-runbook).
+- **Merge with `gh pr merge --delete-branch`** and verify cleanup. The remote branch can be gone while a local branch still exists, for example after a squash merge.
 - **Prune stale tracking refs** with `git fetch --prune`, or set `git config --global fetch.prune true` once. Deleting a branch on the remote does not remove another clone's tracking ref.
 - **Confirm merged before deleting anything by hand.** `git branch --merged main` lists the safe ones, and `git merge-base --is-ancestor <branch> origin/main` answers it for a single branch. Prefer `git branch -d`, which refuses an unmerged branch, over `git branch -D`, which does not.
 - **Leave other people's forks alone.** A contributor's fork appearing as a remote is not clutter to tidy: their branches are theirs, and the tracking refs cost nothing.
